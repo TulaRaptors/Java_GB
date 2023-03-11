@@ -1,60 +1,51 @@
 package HW3;
 
-public class SortedMerge {
-    public static int[] sortArray(int[] array) {
-        if (array == null) {
-            return null;
+class MergeSort {
+    void merge(int arr[], int l, int m, int r) {
+        int n1 = m - l + 1;
+        int n2 = r - m;
+
+        int L[] = new int[n1];
+        int R[] = new int[n2];
+
+        for (int i = 0; i < n1; ++i)
+            L[i] = arr[l + i];
+        for (int j = 0; j < n2; ++j)
+            R[j] = arr[m + 1 + j];
+
+        int i = 0, j = 0;
+
+        int k = l;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                arr[k] = L[i];
+                i++;
+            } else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
         }
-        int length_arr = array.length / 2;
 
-        if (array.length < 2) {
-            return array;
-        }
-        if (array.length % 2 != 0) {
-            length_arr += 1;
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
         }
 
-        int[] arrayR = new int[length_arr];
-        int[] arrayL = new int[array.length / 2];
-
-        for (int i = 0; i < array.length / 2; i++) {
-            arrayL[i] = array[i];
+        while (j < n2) {
+            arr[k] = R[j];
+            j++;
+            k++;
         }
-
-        for (int i = array.length / 2; i < array.length; i++) {
-            arrayR[i - array.length / 2] = array[i];
-        }
-
-        arrayL = sortArray(arrayL);
-        arrayR = sortArray(arrayR);
-
-        return mergeArray(arrayL, arrayR);
     }
 
-    public static int[] mergeArray(int[] arrayL, int[] arrayR) {
-
-        int[] arrayC = new int[arrayL.length + arrayR.length];
-        int posL = 0, posR = 0;
-
-        for (int i = 0; i < arrayC.length; i++) {
-            if (posL < arrayL.length && posR < arrayR.length) {
-                if (arrayL[posL] < arrayR[posR]) {
-                    arrayC[i] = arrayL[posL];
-                    posL++;
-                } else {
-                    arrayC[i] = arrayR[posR];
-                    posR++;
-                }
-            } else if (posL == arrayL.length && posR < arrayR.length) {
-                arrayC[i] = arrayR[posR];
-                posR++;
-            } else if (posL < arrayL.length && posR == arrayR.length) {
-                arrayC[i] = arrayL[posL];
-                posL++;
-            } else {
-                arrayC[i] = 0;
-            }
+    void sort(int arr[], int l, int r) {
+        if (l < r) {
+            int m = l + (r - l) / 2;
+            sort(arr, l, m);
+            sort(arr, m + 1, r);
+            merge(arr, l, m, r);
         }
-        return arrayC;
     }
 }
